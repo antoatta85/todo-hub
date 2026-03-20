@@ -1,6 +1,6 @@
 # Story 1.1: Create a New Todo List
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -16,25 +16,25 @@ so that I can organize my tasks by context or project.
 
 ## Tasks / Subtasks
 
-- [ ] Implement list creation flow in UI and state layer (AC: 1)
-  - [ ] Add list-create input and submit interaction in the list management area.
-  - [ ] Validate list name before create (trim, non-empty, duplicate handling policy).
-  - [ ] Trigger state update so the new list appears immediately in navigation.
+- [x] Implement list creation flow in UI and state layer (AC: 1)
+  - [x] Add list-create input and submit interaction in the list management area.
+  - [x] Validate list name before create (trim, non-empty, duplicate handling policy).
+  - [x] Trigger state update so the new list appears immediately in navigation.
 
-- [ ] Add domain/service support for create-list operation (AC: 1)
-  - [ ] Add list creation function in the feature state/store layer.
-  - [ ] Ensure new list object includes stable id and required metadata fields.
-  - [ ] Wire local persistence path for list creation so reload preserves the new list.
+- [x] Add domain/service support for create-list operation (AC: 1)
+  - [x] Add list creation function in the feature state/store layer.
+  - [x] Ensure new list object includes stable id and required metadata fields.
+  - [x] Wire local persistence path for list creation so reload preserves the new list.
 
-- [ ] Preserve architecture and UX constraints (AC: 1)
-  - [ ] Keep implementation inside feature-first structure and avoid app-bootstrap logic bloat.
-  - [ ] Ensure accessible labels, keyboard submission, and visible validation feedback.
-  - [ ] Follow visual system conventions (tokens, spacing, typography, focus states).
+- [x] Preserve architecture and UX constraints (AC: 1)
+  - [x] Keep implementation inside feature-first structure and avoid app-bootstrap logic bloat.
+  - [x] Ensure accessible labels, keyboard submission, and visible validation feedback.
+  - [x] Follow visual system conventions (tokens, spacing, typography, focus states).
 
-- [ ] Add test coverage for story behavior (AC: 1)
-  - [ ] Unit tests for list creation validation and state transitions.
-  - [ ] Integration test for create interaction and immediate navigation rendering.
-  - [ ] E2E smoke scenario for creating a list and verifying persistence after refresh.
+- [x] Add test coverage for story behavior (AC: 1)
+  - [x] Unit tests for list creation validation and state transitions.
+  - [x] Integration test for create interaction and immediate navigation rendering.
+  - [x] E2E smoke scenario for creating a list and verifying persistence after refresh.
 
 ## Dev Notes
 
@@ -136,17 +136,36 @@ GPT-5.3-Codex
 
 - Story context generated from sprint status, epics, architecture, PRD, UX spec, and test strategy.
 - Epic 1 status transition prepared (`backlog` -> `in-progress`) as first story kickoff.
+- Implemented list-domain model, storage adapter, and manager hook under `apps/web/src/features/lists`.
+- Full validation gates executed successfully:
+  - `npm run test`
+  - `npm run lint`
+  - `npm run typecheck`
+- During implementation, fixed persistence race condition by initializing state lazily from localStorage.
 
 ### Completion Notes List
 
 - Ultimate context engine analysis completed - comprehensive developer guide created.
 - Story keyed to explicit user selection: `1.1`.
 - Story file generated with implementation guardrails, test expectations, and cross-story setup learnings.
+- Implemented accessible list creation UI with validation for empty and duplicate names.
+- Added deterministic local persistence for created lists and verified post-refresh visibility in e2e.
+- Added unit, integration, and e2e tests mapped to Story 1.1 acceptance criteria.
 
 ### File List
 
 - `_bmad-output/implementation-artifacts/1-1-create-a-new-todo-list.md`
+- `apps/web/src/App.tsx`
+- `apps/web/src/App.css`
+- `apps/web/src/App.unit.test.tsx`
+- `apps/web/src/App.integration.test.tsx`
+- `apps/web/src/features/lists/list-model.ts`
+- `apps/web/src/features/lists/list-storage.ts`
+- `apps/web/src/features/lists/use-list-manager.ts`
+- `apps/web/src/features/lists/list-model.unit.test.ts`
+- `e2e/tests/smoke.spec.ts`
 
 ## Change Log
 
 - 2026-03-20: Story file created from `/bmad-create-story` for Story 1.1; status set to `ready-for-dev`.
+- 2026-03-20: Implemented Story 1.1 list creation with validation, local persistence, and unit/integration/e2e coverage; status set to `review`.
