@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TodoHub UX Design Directions</title>
+  <style>
+    :root {
+      --paper: #f7f5f2;
+      --sheet: #ffffff;
+      --ink: #1e1e1e;
+      --ink-2: #4b4b4b;
+      --muted: #757575;
+      --line: #d8d3cc;
+      --border: #bfb8ae;
+      --teal: #0f766e;
+      --teal-soft: #e6f4f2;
+      --done: #a29c92;
+      --done-soft: #b8b1a6;
+      --radius: 12px;
+      --gap: 16px;
+      --shadow: 0 6px 22px rgba(30, 30, 30, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #faf8f5 0%, var(--paper) 100%);
+    }
+
+    header {
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.75);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(6px);
+      z-index: 2;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .dir {
+      background: var(--sheet);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .dir-head {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dir-head h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .dir-head p {
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .canvas {
+      padding: 12px;
+      min-height: 360px;
+      background: #fff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--ink-2);
+      background: #fff;
+    }
+
+    .tab.active {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 2px;
+      font-size: 14px;
+    }
+
+    .task:last-child { border-bottom: 0; }
+
+    .left {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .important {
+      background: var(--teal-soft);
+      border-left: 3px solid var(--teal);
+      padding-left: 8px;
+      margin-left: -8px;
+      border-radius: 8px;
+    }
+
+    .important .tag {
+      color: var(--teal);
+      border-color: var(--teal);
+      background: #f2fbfa;
+    }
+
+    .done {
+      color: var(--done);
+    }
+
+    .done .dot {
+      border-color: var(--done-soft);
+      background: #f3f0eb;
+    }
+
+    .done .dot::after {
+      content: "✓";
+      color: var(--done-soft);
+      font-weight: 700;
+    }
+
+    .done .text {
+      text-decoration: line-through;
+      text-decoration-color: var(--done-soft);
+    }
+
+    .text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag {
+      font-size: 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 8px;
+      color: var(--ink-2);
+      background: #fff;
+      flex: 0 0 auto;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .btn.primary {
+      border-color: var(--teal);
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .switcher {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .switcher strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+
+    .menu-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink-2);
+      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      line-height: 1;
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .legend {
+      margin-top: 10px;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      background: #fcfbf9;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .chip-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .source {
+      font-size: 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: var(--muted);
+      background: #faf9f7;
+      flex: 0 0 auto;
+    }
+
+    .dense .task { padding: 7px 2px; font-size: 13px; }
+    .airy .task { padding: 13px 4px; }
+    .lined { background: repeating-linear-gradient(
+      to bottom,
+      #fff,
+      #fff 30px,
+      #f4f1ec 31px
+    ); }
+
+    .split {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 10px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff;
+    }
+
+    .panel h3 {
+      margin: 4px 0 8px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .list-link {
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 6px;
+      font-size: 12px;
+      color: var(--ink-2);
+      margin-bottom: 4px;
+    }
+
+    .list-link.active {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    footer {
+      padding: 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TodoHub Design Directions</h1>
+    <p class="subtitle">Paper-pen grayscale foundation with teal emphasis for important items. Compare density, hierarchy, and interaction feel.</p>
+  </header>
+
+  <main class="grid">
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 1 · Notebook Minimal</h2>
+        <p>Ruled paper feel, low chrome, calm scan-first hierarchy.</p>
+      </div>
+      <div class="canvas lined airy">
+        <div class="tabs"><span class="tab active">Work</span><span class="tab">Home</span><span class="tab">Errands</span></div>
+        <div class="task important"><div class="left"><span class="dot"></span><span class="text">Prepare weekly demo notes</span></div><span class="tag">Important</span></div>
+        <div class="task important"><div class="left"><span class="dot"></span><span class="text">Review architecture updates</span></div><span class="tag">Important</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Reply to client email</span></div><span class="tag">Todo</span></div>
+        <div class="task done"><div class="left"><span class="dot"></span><span class="text">Refine UX palette</span></div><span class="tag">Done</span></div>
+        <div class="toolbar"><button class="btn primary">Add Task</button><button class="btn">Hide Completed</button></div>
+      </div>
+    </section>
+
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 2 · Command Center</h2>
+        <p>Denser productivity layout with quick controls.</p>
+      </div>
+      <div class="canvas dense split">
+        <aside class="panel">
+          <h3>Lists</h3>
+          <div class="list-link active">Work (7)</div>
+          <div class="list-link">Home (4)</div>
+          <div class="list-link">Side project (5)</div>
+        </aside>
+        <div class="panel">
+          <h3>Tasks</h3>
+          <div class="task important"><div class="left"><span class="dot"></span><span class="text">Finalize sprint story</span></div><span class="tag">Important</span></div>
+          <div class="task"><div class="left"><span class="dot"></span><span class="text">Update API schema notes</span></div><span class="tag">Todo</span></div>
+          <div class="task"><div class="left"><span class="dot"></span><span class="text">Plan release checklist</span></div><span class="tag">Todo</span></div>
+          <div class="task done"><div class="left"><span class="dot"></span><span class="text">Sync with QA</span></div><span class="tag">Done</span></div>
+          <div class="toolbar"><button class="btn primary">Quick Add</button><button class="btn">Filter</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 3 · Calm Focus</h2>
+        <p>Airy composition, stronger whitespace, task calmness.</p>
+      </div>
+      <div class="canvas airy">
+        <div class="tabs"><span class="tab active">Today</span><span class="tab">This week</span></div>
+        <div class="task important"><div class="left"><span class="dot"></span><span class="text">Publish design direction decision</span></div><span class="tag">Important</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Collect stakeholder notes</span></div><span class="tag">Todo</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Write acceptance criteria</span></div><span class="tag">Todo</span></div>
+        <div class="task done"><div class="left"><span class="dot"></span><span class="text">Align architecture terms</span></div><span class="tag">Done</span></div>
+      </div>
+    </section>
+
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 4 · Hybrid Practical</h2>
+        <p>Balanced density combining notebook calm + utility speed.</p>
+      </div>
+      <div class="canvas">
+        <div class="tabs"><span class="tab active">Client work</span><span class="tab">Personal</span><span class="tab">Archive</span></div>
+        <div class="task important"><div class="left"><span class="dot"></span><span class="text">Draft proposal outline</span></div><span class="tag">Important</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Confirm sprint priorities</span></div><span class="tag">Todo</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Prepare retrospective notes</span></div><span class="tag">Todo</span></div>
+        <div class="task done"><div class="left"><span class="dot"></span><span class="text">Send summary to team</span></div><span class="tag">Done</span></div>
+        <div class="toolbar"><button class="btn primary">Add</button><button class="btn">Important only</button><button class="btn">Completed</button></div>
+      </div>
+    </section>
+
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 5 · Mobile Thumb Flow (Refined)</h2>
+        <p>Multi-select chips + merged list view + row toggle for active/completed + 3-dot action menu.</p>
+      </div>
+      <div class="canvas airy">
+        <div class="top-controls">
+          <span class="tag">Merged View</span>
+          <button class="btn">Lists ▾</button>
+        </div>
+        <div class="tabs">
+          <span class="tab active">Main</span>
+          <span class="tab active">Work</span>
+          <span class="tab">Home</span>
+          <span class="tab">Later</span>
+        </div>
+        <div class="chip-actions">
+          <button class="btn">All</button>
+          <button class="btn">Clear</button>
+          <button class="btn">+ List</button>
+        </div>
+        <div class="task important">
+          <div class="left"><span class="dot" title="Tap to toggle active/completed"></span><span class="text">Call design review at 15:00</span></div>
+          <div class="task-actions"><span class="source">Work</span></div>
+        </div>
+        <div class="task">
+          <div class="left"><span class="dot" title="Tap to toggle active/completed"></span><span class="text">Add notes from standup</span></div>
+          <div class="task-actions"><span class="source">Main</span></div>
+        </div>
+        <div class="task">
+          <div class="left"><span class="dot" title="Tap to toggle active/completed"></span><span class="text">Check API logging output</span></div>
+          <div class="task-actions"><span class="source">Work</span></div>
+        </div>
+        <div class="task done">
+          <div class="left"><span class="dot" title="Tap to toggle active/completed"></span><span class="text">Clean old list entries</span></div>
+          <div class="task-actions"><span class="source">Main</span></div>
+        </div>
+        <div class="toolbar"><button class="btn primary">+ New Task</button></div>
+        <div class="legend">
+          Chips can be multi-selected to merge lists visually. "Lists ▾" controls list management (create, rename, reorder, archive, delete). Row circle is status-only: empty = Active, checked = Completed. On mobile, long-press a row opens the task action menu (Edit, Move, Mark/Unmark Important, Duplicate, Delete). On browser, keep 3-dot menu.
+        </div>
+      </div>
+    </section>
+
+    <section class="dir">
+      <div class="dir-head">
+        <h2>Direction 6 · Structured Ledger</h2>
+        <p>Sharper boundaries, subtle grid rhythm, enterprise clarity.</p>
+      </div>
+      <div class="canvas dense">
+        <div class="tabs"><span class="tab active">Backlog</span><span class="tab">In progress</span><span class="tab">Done</span></div>
+        <div class="task important"><div class="left"><span class="dot"></span><span class="text">Finalize contract validation map</span></div><span class="tag">Important</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Draft component token docs</span></div><span class="tag">Todo</span></div>
+        <div class="task"><div class="left"><span class="dot"></span><span class="text">Prepare release notes template</span></div><span class="tag">Todo</span></div>
+        <div class="task done"><div class="left"><span class="dot"></span><span class="text">Update naming conventions</span></div><span class="tag">Done</span></div>
+        <div class="toolbar"><button class="btn">Sort</button><button class="btn primary">Add Item</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Suggested baseline from current UX decisions: <strong>Direction 5 · Mobile Thumb Flow (Refined)</strong>.
+    Important tasks stay grouped at top and highlighted in teal; completed tasks remain visible with lighter gray text.
+  </footer>
+</body>
+</html>

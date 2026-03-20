@@ -1,0 +1,13 @@
+{
+  "name": "@todo/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "typecheck": "echo \"No API typecheck yet (Story 0.2+).\"",
+    "build": "echo \"No API build step yet (Story 0.2+).\"",
+    "lint": "echo \"No API lint rules yet (Story 0.2+).\"",
+    "test": "echo \"No API tests yet (Story 0.2+).\""
+  }
+}
