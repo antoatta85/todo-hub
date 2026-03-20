@@ -21,4 +21,4 @@ This folder contains Playwright configuration and browser-level smoke tests.
 - Run all tests (web, api, e2e):
 	- `npm run test`
 
-The test runner starts the frontend dev server automatically on port 4173.
+The test runner starts the frontend dev server automatically on port 4273.

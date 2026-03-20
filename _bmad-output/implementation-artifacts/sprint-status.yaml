@@ -3,7 +3,7 @@
 # project: todo
 # project_key: NOKEY
 # tracking_system: file-system
-# story_location: /Users/antonioattanasio/Desktop/aine/bmad/todo/_bmad-output/implementation-artifacts
+# story_location: _bmad-output/implementation-artifacts
 
 # STATUS DEFINITIONS:
 # ==================
@@ -35,16 +35,16 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-20T10:15:05Z
-last_updated: 2026-03-20T12:40:00Z
+last_updated: 2026-03-20T14:22:00Z
 project: todo
 project_key: NOKEY
 tracking_system: file-system
-story_location: /Users/antonioattanasio/Desktop/aine/bmad/todo/_bmad-output/implementation-artifacts
+story_location: _bmad-output/implementation-artifacts
 
 development_status:
   epic-0: in-progress
-  0-1-initialize-project-structure: review
-  0-2-set-up-test-infrastructure: review
+  0-1-initialize-project-structure: done
+  0-2-set-up-test-infrastructure: done
   0-3-document-ai-integration-and-agent-usage: backlog
   epic-0-retrospective: optional
 

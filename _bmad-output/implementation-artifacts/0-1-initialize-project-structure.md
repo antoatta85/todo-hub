@@ -1,6 +1,6 @@
 # Story 0.1: Initialize Project Structure
 
-Status: review
+Status: done
 
 ## Story
 
@@ -10,7 +10,7 @@ so that the project has a clear, maintainable structure from day one.
 
 ## Acceptance Criteria
 
-1. Given an empty repository and Node 20+ are available, when the developer runs `npm create vite@latest todo-app -- --template react-ts`, then a TypeScript React starter application is created successfully.
+1. Given an empty repository and Node 20.19+ are available, when the developer runs `npm create vite@latest todo-app -- --template react-ts`, then a TypeScript React starter application is created successfully.
 2. Given the starter app is created, when the initial project structure is prepared, then the workspace contains explicit frontend, backend, and tests directories following the agreed modular layout.
 3. Given project dependencies are not yet installed, when the developer runs `npm install` and `npm run dev` in the frontend app, then the development server starts without build errors.
 4. Given baseline quality tooling is required, when project scripts are reviewed, then lint, test, and build scripts are present and executable.
@@ -18,7 +18,7 @@ so that the project has a clear, maintainable structure from day one.
 ## Tasks / Subtasks
 
 - [x] Initialize frontend starter (AC: 1, 3)
-  - [x] Verify Node version is >= 20.
+  - [x] Verify Node version is >= 20.19.
   - [x] Run `npm create vite@latest todo-app -- --template react-ts`.
   - [x] Install dependencies in `todo-app` via `npm install`.
   - [x] Verify frontend runs via `npm run dev`.
@@ -62,7 +62,7 @@ so that the project has a clear, maintainable structure from day one.
 
 ### Library and Framework Requirements
 
-- Node: 20+ minimum (architecture notes mention modern LTS baseline).
+- Node: 20.19+ minimum (aligned with lockfile and toolchain requirements).
 - Frontend stack target:
   - Vite
   - React
@@ -158,13 +158,13 @@ GPT-5.3-Codex
 - Frontend app moved from `todo-app/` to `apps/web/` and remains runnable.
 - Root scripts now orchestrate web/api lint, test, and build checks.
 - API scaffold and e2e placeholder initialized for Story 0.2 follow-up.
+- Review patch pass normalized sprint status path and standardized on the root workspace lockfile.
 
 ### File List
 
 - `_bmad-output/implementation-artifacts/0-1-initialize-project-structure.md`
 - `apps/web/` (moved from `todo-app/`)
 - `apps/web/package.json`
-- `apps/web/package-lock.json`
 - `apps/api/package.json`
 - `apps/api/src/server.js`
 - `e2e/README.md`
@@ -174,3 +174,4 @@ GPT-5.3-Codex
 ## Change Log
 
 - 2026-03-20: Implemented Story 0.1 scaffolding, structure alignment, and baseline script validation; status set to `review`.
+- 2026-03-20: Applied Story 0.1 review patches for link hardening, portability cleanup, lockfile strategy clarification, and Node version minimum alignment.

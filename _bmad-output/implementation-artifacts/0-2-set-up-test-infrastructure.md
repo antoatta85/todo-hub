@@ -1,6 +1,6 @@
 # Story 0.2: Set Up Test Infrastructure
 
-Status: review
+Status: done
 
 ## Story
 

@@ -10,7 +10,7 @@ This repository is scaffolded for Story 0.1 with explicit frontend, backend, and
 
 ## Prerequisites
 
-- Node 20+
+- Node 20.19+
 - npm 10+
 
 ## Quickstart
@@ -22,8 +22,9 @@ This repository is scaffolded for Story 0.1 with explicit frontend, backend, and
 3. (Optional) Start API scaffold:
    - `npm run dev:api`
 
-Alternative (app-local frontend flow):
-- `cd apps/web && npm install && npm run dev`
+Lockfile strategy:
+- Use the root `package-lock.json` as the single source of truth for workspace installs.
+- Run installs from the repository root (`npm run install:all` or `npm install`).
 
 ## Baseline Quality Scripts
 

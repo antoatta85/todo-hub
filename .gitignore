@@ -5,3 +5,8 @@ dist/
 apps/web/dist/
 test-results/
 playwright-report/
+_bmad/
+.claude/
+.cursor/
+.gemini/
+.github/
