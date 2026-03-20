@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-20T10:15:05Z
-last_updated: 2026-03-20T13:41:23Z
+last_updated: 2026-03-20T13:51:20Z
 project: todo
 project_key: NOKEY
 tracking_system: file-system
@@ -48,8 +48,8 @@ development_status:
   0-3-document-ai-integration-and-agent-usage: ready-for-dev
   epic-0-retrospective: optional
 
-  epic-1: backlog
-  1-1-create-a-new-todo-list: backlog
+  epic-1: in-progress
+  1-1-create-a-new-todo-list: ready-for-dev
   1-2-edit-the-name-of-an-existing-todo-list: backlog
   1-3-archive-a-todo-list: backlog
   1-4-delete-a-todo-list-with-confirmation: backlog
