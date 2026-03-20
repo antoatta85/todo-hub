@@ -28,8 +28,14 @@ Alternative (app-local frontend flow):
 ## Baseline Quality Scripts
 
 - `npm run lint`
-- `npm run test`
+- `npm run test` (web + api + e2e)
+- `npm run test:web` (Vitest unit/integration)
+- `npm run test:e2e` (Playwright)
 - `npm run build`
 
-Notes:
-- API and test infra scripts are placeholders in Story 0.1 and will be fully implemented in Story 0.2.
+## Test Infrastructure Notes
+
+- Story 0.2 configures Vitest in `apps/web` for unit/integration baselines.
+- Story 0.2 configures Playwright in `e2e` for browser smoke coverage.
+- First-time Playwright setup requires browser install:
+   - `npx playwright install chromium`

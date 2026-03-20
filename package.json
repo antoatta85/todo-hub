@@ -11,6 +11,8 @@
     "build:web": "npm --prefix apps/web run build",
     "lint:web": "npm --prefix apps/web run lint",
     "test:web": "npm --prefix apps/web run test",
+    "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "test:all": "npm run test:web && npm run test:api && npm run test:e2e",
     "typecheck:web": "npm --prefix apps/web run typecheck",
     "dev:api": "npm --prefix apps/api run dev",
     "build:api": "npm --prefix apps/api run build",
@@ -19,7 +21,10 @@
     "typecheck:api": "npm --prefix apps/api run typecheck",
     "build": "npm run build:web && npm run build:api",
     "lint": "npm run lint:web && npm run lint:api",
-    "test": "npm run test:web && npm run test:api",
+    "test": "npm run test:all",
     "typecheck": "npm run typecheck:web && npm run typecheck:api"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
   }
 }
