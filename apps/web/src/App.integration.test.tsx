@@ -58,6 +58,116 @@ describe('App integration baseline', () => {
     expect(within(controlsRegion).getByLabelText('Create todo list form')).toBeTruthy()
     expect(within(controlsRegion).getByRole('navigation', { name: 'Todo lists' })).toBeTruthy()
     expect(within(taskRegion).getByText('Create and select a list to start adding tasks.')).toBeTruthy()
-    expect(within(contextRegion).getByText('Select a list and create tasks to unlock contextual actions.')).toBeTruthy()
+    expect(
+      within(contextRegion).getByText(
+        'Select a list and switch between single-list and combined modes to control your task context.',
+      ),
+    ).toBeTruthy()
+  })
+
+  it('preserves task/list interaction continuity within stable shell regions', () => {
+    render(<App />)
+
+    const controlsRegion = screen.getByRole('region', { name: 'List and filter controls' })
+    const taskRegion = screen.getByRole('region', { name: 'Primary task area' })
+    const contextRegion = screen.getByRole('region', { name: 'Contextual actions' })
+
+    const listInput = within(controlsRegion).getByLabelText('New list name')
+    fireEvent.change(listInput, { target: { value: 'Work' } })
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Create list' }))
+
+    fireEvent.change(listInput, { target: { value: 'Home' } })
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Create list' }))
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Work' }))
+    const taskInputWork = within(taskRegion).getByLabelText('New task in Work')
+    fireEvent.change(taskInputWork, { target: { value: 'Prepare notes' } })
+    fireEvent.click(within(taskRegion).getByRole('button', { name: '+ New task' }))
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Home' }))
+    expect(within(taskRegion).getByLabelText('New task in Home')).toBeTruthy()
+    expect(within(contextRegion).getByText('Home')).toBeTruthy()
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Work' }))
+    expect(within(taskRegion).getByText('Prepare notes')).toBeTruthy()
+    expect(within(contextRegion).getByText('Work')).toBeTruthy()
+  })
+
+  it('switches between single-list and combined view with source-list tagging', () => {
+    render(<App />)
+
+    const controlsRegion = screen.getByRole('region', { name: 'List and filter controls' })
+    const taskRegion = screen.getByRole('region', { name: 'Primary task area' })
+    const contextRegion = screen.getByRole('region', { name: 'Contextual actions' })
+
+    const listInput = within(controlsRegion).getByLabelText('New list name')
+    fireEvent.change(listInput, { target: { value: 'Work' } })
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Create list' }))
+    fireEvent.change(listInput, { target: { value: 'Home' } })
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Create list' }))
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Work' }))
+    let taskInput = within(taskRegion).getByLabelText('New task in Work')
+    fireEvent.change(taskInput, { target: { value: 'Prepare roadmap' } })
+    fireEvent.click(within(taskRegion).getByRole('button', { name: '+ New task' }))
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Home' }))
+    taskInput = within(taskRegion).getByLabelText('New task in Home')
+    fireEvent.change(taskInput, { target: { value: 'Buy groceries' } })
+    fireEvent.click(within(taskRegion).getByRole('button', { name: '+ New task' }))
+
+    expect(within(taskRegion).queryByText('Prepare roadmap')).toBeNull()
+    expect(within(taskRegion).getByText('Buy groceries')).toBeTruthy()
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Combined view' }))
+
+    expect(within(taskRegion).getByText('Prepare roadmap')).toBeTruthy()
+    expect(within(taskRegion).getByText('Buy groceries')).toBeTruthy()
+    expect(within(taskRegion).getByLabelText('Source list: Work')).toBeTruthy()
+    expect(within(taskRegion).getByLabelText('Source list: Home')).toBeTruthy()
+    expect(within(contextRegion).getByText('Combined view')).toBeTruthy()
+    expect(within(contextRegion).getByText('Merged with 2 lists')).toBeTruthy()
+
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Single list view' }))
+
+    expect(within(taskRegion).queryByText('Prepare roadmap')).toBeNull()
+    expect(within(taskRegion).getByText('Buy groceries')).toBeTruthy()
+    expect(within(taskRegion).queryByLabelText('Source list: Home')).toBeNull()
+  })
+
+  it('toggles task completion between active and completed sections and keeps it after reload', () => {
+    render(<App />)
+
+    const controlsRegion = screen.getByRole('region', { name: 'List and filter controls' })
+    const taskRegion = screen.getByRole('region', { name: 'Primary task area' })
+
+    const listInput = within(controlsRegion).getByLabelText('New list name')
+    fireEvent.change(listInput, { target: { value: 'Work' } })
+    fireEvent.click(within(controlsRegion).getByRole('button', { name: 'Create list' }))
+
+    const taskInput = within(taskRegion).getByLabelText('New task in Work')
+    fireEvent.change(taskInput, { target: { value: 'Prepare roadmap' } })
+    fireEvent.click(within(taskRegion).getByRole('button', { name: '+ New task' }))
+
+    const activeSection = within(taskRegion).getByRole('heading', { name: 'Active tasks' }).closest('div')
+    const completedSection = within(taskRegion).getByRole('heading', { name: 'Completed tasks' }).closest('div')
+    expect(activeSection).toBeTruthy()
+    expect(completedSection).toBeTruthy()
+
+    fireEvent.click(within(taskRegion).getByRole('checkbox', { name: 'Mark task "Prepare roadmap" as completed' }))
+
+    expect(within(activeSection as HTMLElement).queryByText('Prepare roadmap')).toBeNull()
+    expect(within(completedSection as HTMLElement).getByText('Prepare roadmap')).toBeTruthy()
+    expect(within(completedSection as HTMLElement).getByText('Completed')).toBeTruthy()
+
+    cleanup()
+    render(<App />)
+
+    const persistedTaskRegion = screen.getByRole('region', { name: 'Primary task area' })
+    const persistedCompletedSection = within(persistedTaskRegion)
+      .getByRole('heading', { name: 'Completed tasks' })
+      .closest('div')
+    expect(persistedCompletedSection).toBeTruthy()
+    expect(within(persistedCompletedSection as HTMLElement).getByText('Prepare roadmap')).toBeTruthy()
   })
 })

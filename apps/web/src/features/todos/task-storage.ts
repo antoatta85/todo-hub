@@ -19,7 +19,9 @@ export function loadTasks(): TodoTask[] {
         typeof item?.id === 'string' &&
         typeof item?.listId === 'string' &&
         typeof item?.text === 'string' &&
-        typeof item?.isCompleted === 'boolean',
+        typeof item?.isCompleted === 'boolean' &&
+        typeof item?.createdAt === 'string' &&
+        typeof item?.updatedAt === 'string',
     )
   } catch {
     return []

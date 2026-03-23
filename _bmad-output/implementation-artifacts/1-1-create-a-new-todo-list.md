@@ -1,6 +1,6 @@
 # Story 1.1: Create a New Todo List
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -169,3 +169,4 @@ GPT-5.3-Codex
 
 - 2026-03-20: Story file created from `/bmad-create-story` for Story 1.1; status set to `ready-for-dev`.
 - 2026-03-20: Implemented Story 1.1 list creation with validation, local persistence, and unit/integration/e2e coverage; status set to `review`.
+- 2026-03-23: Story promoted to `done` after review validation and storage-hardening follow-up closure.

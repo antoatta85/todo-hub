@@ -46,3 +46,11 @@ export function createTodoTask(listId: string, text: string): TodoTask {
     updatedAt: now,
   }
 }
+
+export function toggleTaskCompletion(task: TodoTask): TodoTask {
+  return {
+    ...task,
+    isCompleted: !task.isCompleted,
+    updatedAt: new Date().toISOString(),
+  }
+}

@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react'
 
 import type { TodoList } from '../list-model'
+import type { TaskViewMode } from '../../todos/task-view'
 
 type ListControlsRegionProps = {
   newListName: string
@@ -10,6 +11,9 @@ type ListControlsRegionProps = {
   lists: TodoList[]
   effectiveSelectedListId: string | null
   onSelectList: (listId: string) => void
+  viewMode: TaskViewMode
+  canUseCombinedView: boolean
+  onViewModeChange: (viewMode: TaskViewMode) => void
 }
 
 export function ListControlsRegion({
@@ -20,6 +24,9 @@ export function ListControlsRegion({
   lists,
   effectiveSelectedListId,
   onSelectList,
+  viewMode,
+  canUseCombinedView,
+  onViewModeChange,
 }: ListControlsRegionProps) {
   return (
     <>
@@ -46,6 +53,30 @@ export function ListControlsRegion({
         <p role="alert" className="error-message">
           {listError}
         </p>
+      ) : null}
+
+      <div className="view-mode-controls" role="group" aria-label="Task view mode">
+        <button
+          type="button"
+          className={`view-mode-button ${viewMode === 'single' ? 'selected' : ''}`}
+          aria-pressed={viewMode === 'single'}
+          onClick={() => onViewModeChange('single')}
+        >
+          Single list view
+        </button>
+        <button
+          type="button"
+          className={`view-mode-button ${viewMode === 'combined' ? 'selected' : ''}`}
+          aria-pressed={viewMode === 'combined'}
+          onClick={() => onViewModeChange('combined')}
+          disabled={!canUseCombinedView}
+        >
+          Combined view
+        </button>
+      </div>
+
+      {!canUseCombinedView ? (
+        <p className="empty-state">Create at least two lists to enable combined view.</p>
       ) : null}
 
       <nav aria-label="Todo lists" className="lists-nav">

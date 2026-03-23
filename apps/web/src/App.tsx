@@ -6,6 +6,7 @@ import { useListManager } from './features/lists/use-list-manager'
 import { ListControlsRegion } from './features/lists/components/ListControlsRegion'
 import { ContextActionsRegion } from './features/todos/components/ContextActionsRegion'
 import { TaskContentRegion } from './features/todos/components/TaskContentRegion'
+import { getVisibleTaskSections, type TaskViewMode } from './features/todos/task-view'
 import { useTaskManager } from './features/todos/use-task-manager'
 import './App.css'
 
@@ -13,9 +14,12 @@ function App() {
   const [newListName, setNewListName] = useState('')
   const [newTaskText, setNewTaskText] = useState('')
   const [selectedListId, setSelectedListId] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<TaskViewMode>('single')
   const { lists, error: listError, createList } = useListManager()
   const listIds = useMemo(() => lists.map((list) => list.id), [lists])
-  const { tasks, error: taskError, createTask } = useTaskManager(listIds)
+  const { tasks, error: taskError, createTask, toggleTask } = useTaskManager(listIds)
+  const canUseCombinedView = lists.length >= 2
+  const effectiveViewMode: TaskViewMode = canUseCombinedView ? viewMode : 'single'
 
   const effectiveSelectedListId =
     selectedListId && lists.some((list) => list.id === selectedListId)
@@ -27,13 +31,25 @@ function App() {
     [effectiveSelectedListId, lists],
   )
 
-  const activeTasks = useMemo(() => {
-    if (!effectiveSelectedListId) {
-      return []
+  const listNameById = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const list of lists) {
+      map.set(list.id, list.name)
     }
+    return map
+  }, [lists])
 
-    return tasks.filter((task) => task.listId === effectiveSelectedListId && !task.isCompleted)
-  }, [effectiveSelectedListId, tasks])
+  const visibleTaskSections = useMemo(() => {
+    return getVisibleTaskSections({
+      tasks,
+      listIds,
+      selectedListId: effectiveSelectedListId,
+      viewMode: effectiveViewMode,
+    })
+  }, [effectiveSelectedListId, effectiveViewMode, listIds, tasks])
+
+  const activeTasks = visibleTaskSections.active
+  const completedTasks = visibleTaskSections.completed
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -52,6 +68,18 @@ function App() {
     }
   }
 
+  function handleViewModeChange(nextViewMode: TaskViewMode) {
+    if (nextViewMode === 'combined' && !canUseCombinedView) {
+      return
+    }
+
+    setViewMode(nextViewMode)
+  }
+
+  function getSourceListName(listId: string): string {
+    return listNameById.get(listId) ?? 'Unknown list'
+  }
+
   return (
     <AppShell
       listControls={
@@ -63,6 +91,9 @@ function App() {
           lists={lists}
           effectiveSelectedListId={effectiveSelectedListId}
           onSelectList={setSelectedListId}
+          viewMode={effectiveViewMode}
+          canUseCombinedView={canUseCombinedView}
+          onViewModeChange={handleViewModeChange}
         />
       }
       primaryTaskArea={
@@ -71,14 +102,20 @@ function App() {
           newTaskText={newTaskText}
           onNewTaskTextChange={setNewTaskText}
           onCreateTaskSubmit={handleCreateTask}
+          onToggleTaskCompletion={toggleTask}
           taskError={taskError}
           activeTasks={activeTasks}
+          completedTasks={completedTasks}
+          viewMode={effectiveViewMode}
+          getSourceListName={getSourceListName}
         />
       }
       contextualActions={
         <ContextActionsRegion
           selectedListName={selectedList?.name ?? null}
           activeTaskCount={activeTasks.length}
+          viewMode={effectiveViewMode}
+          listCount={lists.length}
         />
       }
     />

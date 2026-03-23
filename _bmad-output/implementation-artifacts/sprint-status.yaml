@@ -1,5 +1,5 @@
 # generated: 2026-03-20T10:15:05Z
-# last_updated: 2026-03-20T17:00:29Z
+# last_updated: 2026-03-23T15:12:57Z
 # project: todo
 # project_key: NOKEY
 # tracking_system: file-system
@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-20T10:15:05Z
-last_updated: 2026-03-20T17:00:29Z
+last_updated: 2026-03-23T16:59:00Z
 project: todo
 project_key: NOKEY
 tracking_system: file-system
@@ -49,20 +49,20 @@ development_status:
   epic-0-retrospective: optional
 
   epic-1: in-progress
-  1-1-create-a-new-todo-list: review
+  1-1-create-a-new-todo-list: done
   1-2-edit-the-name-of-an-existing-todo-list: backlog
   1-3-archive-a-todo-list: backlog
   1-4-delete-a-todo-list-with-confirmation: backlog
-  1-5-switch-between-lists-and-global-combined-view: backlog
+  1-5-switch-between-lists-and-global-combined-view: done
   1-6-accessibility-and-qa-for-list-management: backlog
   epic-1-retrospective: optional
 
   epic-2: in-progress
-  2-1-add-a-new-task-to-a-selected-todo-list: review
+  2-1-add-a-new-task-to-a-selected-todo-list: done
   2-2-edit-an-existing-task: backlog
   2-3-delete-a-task-with-confirmation: backlog
-  2-4-toggle-task-completion: backlog
-  2-5-display-completed-tasks-at-the-bottom: backlog
+  2-4-toggle-task-completion: review
+  2-5-display-completed-tasks-at-the-bottom: review
   2-6-accessibility-and-qa-for-task-core-experience: backlog
   2-7-performance-and-ai-documentation-for-task-core-experience: backlog
   epic-2-retrospective: optional
@@ -101,7 +101,7 @@ development_status:
 
   epic-7: in-progress
   7-1-establish-app-shell-and-information-architecture: done
-  7-2-responsive-layout-modes-mobile-stack-desktop-split: backlog
+  7-2-responsive-layout-modes-mobile-stack-desktop-split: done
   7-3-menus-and-context-action-surfaces: backlog
   7-4-ui-shell-qa-and-accessibility-validation: backlog
   epic-7-retrospective: optional

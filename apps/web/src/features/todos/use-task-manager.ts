@@ -1,12 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { createTodoTask, normalizeTaskText, validateTaskText, type TodoTask } from './task-model'
+import {
+  createTodoTask,
+  normalizeTaskText,
+  toggleTaskCompletion,
+  validateTaskText,
+  type TodoTask,
+} from './task-model'
 import { loadTasks, saveTasks } from './task-storage'
 
 type UseTaskManagerResult = {
   tasks: TodoTask[]
   error: string | null
   createTask: (listId: string | null, rawText: string) => boolean
+  toggleTask: (taskId: string) => void
 }
 
 export function useTaskManager(listIds: string[]): UseTaskManagerResult {
@@ -45,9 +52,15 @@ export function useTaskManager(listIds: string[]): UseTaskManagerResult {
     return true
   }
 
+  function toggleTask(taskId: string): void {
+    setTasks((current) => current.map((task) => (task.id === taskId ? toggleTaskCompletion(task) : task)))
+    setError(null)
+  }
+
   return {
     tasks: sortedTasks,
     error,
     createTask,
+    toggleTask,
   }
 }

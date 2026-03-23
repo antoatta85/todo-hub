@@ -14,7 +14,13 @@ export function loadLists(): TodoList[] {
       return []
     }
 
-    return parsed.filter((item) => typeof item?.id === 'string' && typeof item?.name === 'string')
+    return parsed.filter(
+      (item) =>
+        typeof item?.id === 'string' &&
+        typeof item?.name === 'string' &&
+        typeof item?.createdAt === 'string' &&
+        typeof item?.updatedAt === 'string',
+    )
   } catch {
     return []
   }
