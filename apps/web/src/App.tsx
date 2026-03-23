@@ -1,63 +1,87 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 
+import { AppShell } from './app/AppShell'
 import { useListManager } from './features/lists/use-list-manager'
+import { ListControlsRegion } from './features/lists/components/ListControlsRegion'
+import { ContextActionsRegion } from './features/todos/components/ContextActionsRegion'
+import { TaskContentRegion } from './features/todos/components/TaskContentRegion'
+import { useTaskManager } from './features/todos/use-task-manager'
 import './App.css'
 
 function App() {
   const [newListName, setNewListName] = useState('')
-  const { lists, error, createList } = useListManager()
+  const [newTaskText, setNewTaskText] = useState('')
+  const [selectedListId, setSelectedListId] = useState<string | null>(null)
+  const { lists, error: listError, createList } = useListManager()
+  const listIds = useMemo(() => lists.map((list) => list.id), [lists])
+  const { tasks, error: taskError, createTask } = useTaskManager(listIds)
+
+  const effectiveSelectedListId =
+    selectedListId && lists.some((list) => list.id === selectedListId)
+      ? selectedListId
+      : lists[0]?.id ?? null
+
+  const selectedList = useMemo(
+    () => lists.find((list) => list.id === effectiveSelectedListId) ?? null,
+    [effectiveSelectedListId, lists],
+  )
+
+  const activeTasks = useMemo(() => {
+    if (!effectiveSelectedListId) {
+      return []
+    }
+
+    return tasks.filter((task) => task.listId === effectiveSelectedListId && !task.isCompleted)
+  }, [effectiveSelectedListId, tasks])
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const wasCreated = createList(newListName)
-    if (wasCreated) {
+    const createdList = createList(newListName)
+    if (createdList) {
       setNewListName('')
+      setSelectedListId(createdList.id)
+    }
+  }
+
+  function handleCreateTask(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const wasCreated = createTask(effectiveSelectedListId, newTaskText)
+    if (wasCreated) {
+      setNewTaskText('')
     }
   }
 
   return (
-    <main className="app-shell">
-      <section className="panel" aria-labelledby="list-management-heading">
-        <h1 id="list-management-heading">List Management</h1>
-        <p className="subtitle">Create a new todo list to organize your tasks by project or context.</p>
-
-        <form onSubmit={handleSubmit} className="create-form" aria-label="Create todo list form">
-          <label htmlFor="list-name-input">New list name</label>
-          <div className="form-row">
-            <input
-              id="list-name-input"
-              name="listName"
-              type="text"
-              value={newListName}
-              onChange={(event) => setNewListName(event.target.value)}
-              placeholder="e.g. Client work"
-              autoComplete="off"
-            />
-            <button type="submit">Create list</button>
-          </div>
-        </form>
-
-        {error ? (
-          <p role="alert" className="error-message">
-            {error}
-          </p>
-        ) : null}
-
-        <nav aria-label="Todo lists" className="lists-nav">
-          <h2>Todo lists</h2>
-          {lists.length === 0 ? (
-            <p className="empty-state">No lists yet. Create your first list above.</p>
-          ) : (
-            <ul>
-              {lists.map((list) => (
-                <li key={list.id}>{list.name}</li>
-              ))}
-            </ul>
-          )}
-        </nav>
-      </section>
-    </main>
+    <AppShell
+      listControls={
+        <ListControlsRegion
+          newListName={newListName}
+          onNewListNameChange={setNewListName}
+          onCreateListSubmit={handleSubmit}
+          listError={listError}
+          lists={lists}
+          effectiveSelectedListId={effectiveSelectedListId}
+          onSelectList={setSelectedListId}
+        />
+      }
+      primaryTaskArea={
+        <TaskContentRegion
+          selectedList={selectedList}
+          newTaskText={newTaskText}
+          onNewTaskTextChange={setNewTaskText}
+          onCreateTaskSubmit={handleCreateTask}
+          taskError={taskError}
+          activeTasks={activeTasks}
+        />
+      }
+      contextualActions={
+        <ContextActionsRegion
+          selectedListName={selectedList?.name ?? null}
+          activeTaskCount={activeTasks.length}
+        />
+      }
+    />
   )
 }
 

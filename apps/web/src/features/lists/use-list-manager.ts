@@ -16,18 +16,18 @@ export function useListManager() {
     [lists],
   )
 
-  function createList(rawName: string): boolean {
+  function createList(rawName: string): TodoList | null {
     const validationError = validateListName(rawName, lists)
     if (validationError) {
       setError(validationError)
-      return false
+      return null
     }
 
     const name = normalizeListName(rawName)
     const nextList = createTodoList(name)
     setLists((current) => [...current, nextList])
     setError(null)
-    return true
+    return nextList
   }
 
   return {

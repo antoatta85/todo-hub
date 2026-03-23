@@ -96,11 +96,12 @@ UX-DR12: Deterministic sorting and state transitions for all task and list opera
 - FR11-FR15 -> Epic 3 (Stories 3.1-3.3)
 - FR17-FR20 -> Epic 4 (Stories 4.1-4.4)
 - FR21-FR25 -> Epic 5 (Stories 5.1-5.4)
+- UX-DR1-UX-DR12 -> Epic 7 (Stories 7.1-7.4)
 - NFR coverage and cross-cutting quality checks are addressed in Story x.5/x.6/x.7 QA stories and enabling tracks.
 
 ## Epic List
 
-User-facing delivery epics are Epic 1 through Epic 5.
+User-facing delivery epics are Epic 1 through Epic 5, with Epic 7 dedicated to UI shell/layout orchestration.
 
 ### Epic 1: List Management & Organization
 Users can create, edit, archive, delete, and switch between todo lists, including a global combined view. QA: Unit tests, integration tests, accessibility checks, AI documentation.
@@ -153,6 +154,48 @@ So that the app is robust and usable by everyone.
 
 **Acceptance Criteria:**
 - Given list management features are implemented, when QA runs unit and integration tests plus accessibility checks, then test results are recorded and WCAG AA compliance issues are surfaced for remediation.
+
+
+### Epic 7: UI Shell, Layout Composition, and Navigation Surfaces
+
+Users need a coherent application shell that governs where list management, task capture, and task actions appear across mobile and desktop. This epic owns layout composition and menu/action surfaces so feature epics can implement behavior without ad hoc page structure. QA: responsiveness, accessibility, interaction consistency, and visual-system conformance.
+**Requirements covered:** UX-DR1, UX-DR2, UX-DR4, UX-DR5, UX-DR6, UX-DR10, UX-DR11
+
+#### Story 7.1: Establish App Shell and Information Architecture
+As a user,
+I want a clear app shell with stable regions for list controls and task content,
+So that I can understand where actions belong and navigate without confusion.
+
+**Acceptance Criteria:**
+- Given the app loads on mobile or desktop, when the shell renders, then top-level regions (list/filter controls, primary task area, contextual actions) are consistently placed and labeled.
+- And Given feature modules render into the shell, when list and task features are used, then layout ownership remains in shell composition rather than duplicated in feature components.
+
+#### Story 7.2: Responsive Layout Modes (Mobile Stack + Desktop Split)
+As a user,
+I want layout behavior optimized for both thumb-first mobile and desktop productivity,
+So that interactions remain fast and readable on any device.
+
+**Acceptance Criteria:**
+- Given viewport width changes across breakpoints, when the app reflows, then mobile uses stacked sections and desktop uses split context without breaking feature behavior.
+- And Given responsive mode changes, when users continue task/list actions, then focus state and interaction continuity are preserved.
+
+#### Story 7.3: Menus and Context Action Surfaces
+As a user,
+I want predictable menu surfaces for list and task secondary actions,
+So that advanced actions are available without cluttering the main workflow.
+
+**Acceptance Criteria:**
+- Given desktop usage, when a row/action trigger is activated, then overflow/context menu surfaces open with keyboard support.
+- And Given mobile usage, when long-press or equivalent trigger is used, then contextual action surfaces open with equivalent actions and clear dismiss behavior.
+
+#### Story 7.4: UI Shell QA and Accessibility Validation
+As a QA engineer,
+I want to validate app-shell layout, menus, and responsive behavior,
+So that UI composition is stable, accessible, and aligned to the UX specification.
+
+**Acceptance Criteria:**
+- Given shell and menu surfaces are implemented, when unit/integration/E2E and accessibility checks run, then navigation, focus order, ARIA labeling, and breakpoint behavior pass WCAG AA expectations.
+- And Design-system checks confirm shell uses approved tokens, spacing scale, and interaction states consistently.
 
 
 ### Epic 2: Task Core Experience
